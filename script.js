@@ -22,7 +22,7 @@
 const hearts =
 document.getElementById("hearts");
 
-for(let i = 0; i < 50; i++){
+for(let i = 0; i < 20; i++){
 
   const heart =
   document.createElement("div");
