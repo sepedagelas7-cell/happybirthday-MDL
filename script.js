@@ -1,157 +1,134 @@
-  // AUTOPLAY FIX
-    window.addEventListener('load', () => {
+// ================= AUTOPLAY MUSIC FIX =================
+window.addEventListener('load', () => {
 
-      const music = document.getElementById('bgMusic');
+  const music = document.getElementById('bgMusic');
 
-      // coba autoplay
+  music.play().catch(() => {
+    // kalau autoplay diblokir, aktifkan saat klik pertama
+    document.body.addEventListener('click', () => {
       music.play();
-
-      // unmute setelah play
       music.muted = false;
+    }, { once: true });
+  });
 
-      // fallback jika browser blokir
-      document.body.addEventListener('click', () => {
-        music.play();
-        music.muted = false;
-      }, { once:true });
+  music.muted = false;
+});
 
-    });
 
-// FLOATING HEARTS
+// ================= FLOATING HEARTS =================
+const heartsContainer = document.getElementById("hearts");
 
-const hearts =
-document.getElementById("hearts");
+const heartIcons = ["💜","✨","🌙","🎉","🌸"];
 
-for(let i = 0; i < 20; i++){
+function spawnHearts(){
 
-  const heart =
-  document.createElement("div");
+  for(let i = 0; i < 20; i++){
 
-  heart.classList.add("heart");
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
 
-  const icons = ["💜","✨","🌙","🎉","🌸"];
+    heart.innerHTML =
+      heartIcons[Math.floor(Math.random() * heartIcons.length)];
 
-  heart.innerHTML =
-  icons[Math.floor(Math.random() * icons.length)];
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = (Math.random() * 30 + 20) + "px";
+    heart.style.animationDuration = (Math.random() * 6 + 4) + "s";
 
-  heart.style.left =
-  Math.random() * 100 + "vw";
+    heartsContainer.appendChild(heart);
 
-  heart.style.fontSize =
-  Math.random() * 30 + 20 + "px";
-
-  heart.style.animationDuration =
-  Math.random() * 6 + 4  + "s";
-
-  hearts.appendChild(heart);
+    setTimeout(() => {
+      heart.remove();
+    }, 8000);
+  }
 }
 
-// GIFT CLICK
+spawnHearts();
 
-const gift =
-document.getElementById("gift");
 
-const popup =
-document.getElementById("popup");
-
-const closeBtn =
-document.getElementById("closeBtn");
+// ================= GIFT CLICK =================
+const gift = document.getElementById("gift");
+const popup = document.getElementById("popup");
+const closeBtn = document.getElementById("closeBtn");
 
 gift.addEventListener("click", () => {
 
-  // OPEN LID
-  const lid =
-  document.querySelector(".lid");
+  const lid = document.querySelector(".lid");
+  if(lid){
+    lid.style.transform = "translateY(-25px) rotate(-12deg)";
+  }
 
-  lid.style.transform =
-  "translateY(-25px) rotate(-12deg)";
-
-  // SHOW POPUP
   popup.style.display = "flex";
 
-  // CONFETTI
   createConfetti();
 });
 
-// CLOSE
 
+// CLOSE POPUP
 closeBtn.addEventListener("click", () => {
-
   popup.style.display = "none";
 });
 
-// OUTSIDE CLICK
-
 window.addEventListener("click", (e) => {
-
   if(e.target === popup){
-
     popup.style.display = "none";
   }
 });
 
-// CONFETTI
 
+// ================= CONFETTI (OPTIMIZED FIX) =================
 function createConfetti(){
+
+  const icons = ["💜","✨","🎉","🌸"];
 
   for(let i = 0; i < 15; i++){
 
-    const confetti =
-    document.createElement("div");
+    const confetti = document.createElement("div");
 
     confetti.innerHTML =
-    ["💜","✨","🎉","🌸"][Math.floor(Math.random() * 4)];
+      icons[Math.floor(Math.random() * icons.length)];
 
     confetti.style.position = "fixed";
-
-    confetti.style.left =
-    Math.random() * window.innerWidth + "px";
-
-    confetti.style.top =
-    "-20px";
-
-    confetti.style.fontSize =
-    Math.random() * 20 + 15 + "px";
-
-    confetti.style.zIndex = "999";
+    confetti.style.left = Math.random() * window.innerWidth + "px";
+    confetti.style.top = "-20px";
+    confetti.style.fontSize = (Math.random() * 20 + 15) + "px";
+    confetti.style.zIndex = "9999";
+    confetti.style.pointerEvents = "none";
 
     document.body.appendChild(confetti);
 
-    let topPos = -20;
+    let posY = -20;
+    const speed = Math.random() * 4 + 3;
 
-    const speed =
-    Math.random() * 5 + 3;
+    function fall(){
 
-    const fall = setInterval(() => {
-
-      topPos += speed;
-
-      confetti.style.top =
-      topPos + "px";
+      posY += speed;
 
       confetti.style.transform =
-      `rotate(${topPos * 2}deg)`;
+        `translateY(${posY}px) rotate(${posY * 2}deg)`;
 
-      if(topPos > window.innerHeight){
-
-        clearInterval(fall);
-
+      if(posY < window.innerHeight){
+        requestAnimationFrame(fall);
+      } else {
         confetti.remove();
       }
+    }
 
-    },20);
+    requestAnimationFrame(fall);
   }
+}
 
-/////
 
+// ================= HEART EXPLOSION =================
 function createHeartExplosion(x, y){
 
-  const hearts = ["💜","💖","💗","💞","💘","✨"];
+  const icons = ["💜","💖","💗","💞","💘","✨"];
 
   for(let i = 0; i < 25; i++){
 
     const heart = document.createElement("div");
-    heart.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
+
+    heart.innerHTML =
+      icons[Math.floor(Math.random() * icons.length)];
 
     heart.style.position = "fixed";
     heart.style.left = x + "px";
@@ -162,8 +139,7 @@ function createHeartExplosion(x, y){
 
     document.body.appendChild(heart);
 
-    // arah random
-    const angle = Math.random() * 2 * Math.PI;
+    const angle = Math.random() * Math.PI * 2;
     const distance = Math.random() * 120 + 50;
 
     const dx = Math.cos(angle) * distance;
@@ -177,24 +153,24 @@ function createHeartExplosion(x, y){
       easing: "ease-out"
     });
 
-    setTimeout(() => {
-      heart.remove();
-    }, 800);
+    setTimeout(() => heart.remove(), 800);
   }
 }
 
+
+// ================= CLICK IMAGE EXPLOSION =================
 const clickImg = document.getElementById("clickImg");
 
-clickImg.addEventListener("click", (e) => {
+if(clickImg){
 
-  const rect = clickImg.getBoundingClientRect();
+  clickImg.addEventListener("click", (e) => {
 
-  const x = rect.left + rect.width / 2;
-  const y = rect.top + rect.height / 2;
+    const rect = clickImg.getBoundingClientRect();
 
-  createHeartExplosion(x, y);
+    const x = rect.left + rect.width / 2;
+    const y = rect.top + rect.height / 2;
 
-});
-
+    createHeartExplosion(x, y);
+  });
 
 }
