@@ -94,7 +94,7 @@ window.addEventListener("click", (e) => {
 
 function createConfetti(){
 
-  for(let i = 0; i < 50; i++){
+  for(let i = 0; i < 15; i++){
 
     const confetti =
     document.createElement("div");
