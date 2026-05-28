@@ -22,7 +22,7 @@
 const hearts =
 document.getElementById("hearts");
 
-for(let i = 0; i < 100; i++){
+for(let i = 0; i < 50; i++){
 
   const heart =
   document.createElement("div");
@@ -35,7 +35,7 @@ for(let i = 0; i < 100; i++){
   icons[Math.floor(Math.random() * icons.length)];
 
   heart.style.left =
-  Math.random() * 50 + "vw";
+  Math.random() * 100 + "vw";
 
   heart.style.fontSize =
   Math.random() * 30 + 20 + "px";
