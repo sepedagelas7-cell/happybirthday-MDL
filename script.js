@@ -35,7 +35,7 @@ for(let i = 0; i < 100; i++){
   icons[Math.floor(Math.random() * icons.length)];
 
   heart.style.left =
-  Math.random() * 100 + "vw";
+  Math.random() * 50 + "vw";
 
   heart.style.fontSize =
   Math.random() * 30 + 20 + "px";
